@@ -1,0 +1,23 @@
+{
+  "overview": "BookBank.bh is a community-driven book sharing platform where users can lend, borrow, and donate books for free. Features email/password accounts, smart book search powered by Google Books to find exact editions, and real-time in-app messaging between borrowers and lenders.",
+  "features": [
+    "Email and password sign in and sign up",
+    "Google Books search to find exact book editions",
+    "Manual book entry fallback",
+    "Personal book library management",
+    "Community library with search and filters",
+    "Book request and lending system",
+    "In-app chat after request is accepted",
+    "Charity donation section"
+  ],
+  "category": "community",
+  "tags": [
+    "books",
+    "community",
+    "sharing",
+    "library",
+    "lending",
+    "donation"
+  ],
+  "last_updated": "2026-04-13T15:04:15.949Z"
+}

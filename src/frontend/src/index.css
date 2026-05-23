@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: "Bitcount Grid Double";
+    --font-body: "Lora";
+    --font-mono: "JetBrainsMono";
+    --radius: 0.75rem;
+
+    /* ── Light mode — exact hex values, no blending ── */
+    --background: #e4d5b4;
+    --foreground: #4a3728;
+
+    --card: #efebce;
+    --card-foreground: #4a3728;
+    --popover: #efebce;
+    --popover-foreground: #4a3728;
+
+    /* Primary — olive green (#A3A380) */
+    --primary: #a3a380;
+    --primary-foreground: #001d00;
+
+    /* Secondary — warm khaki/gold (#D7CE93) */
+    --secondary: #d7ce93;
+    --secondary-foreground: #001d00;
+
+    /* Muted — dusty rose/terracotta (#D8A48F) */
+    --muted: #d8a48f;
+    --muted-foreground: #999999;
+
+    /* Accent — mauve/muted rose (#BB8588) */
+    --accent: #bb8588;
+    --accent-foreground: #001d00;
+
+    /* Destructive */
+    --destructive: #c0392b;
+    --destructive-foreground: #efebce;
+
+    --border: #a3a380;
+    --input: #d7ce93;
+    --ring: #bb8588;
+
+    /* Charts */
+    --chart-1: #a3a380;
+    --chart-2: #d7ce93;
+    --chart-3: #d8a48f;
+    --chart-4: #bb8588;
+    --chart-5: #efebce;
+
+    /* Sidebar */
+    --sidebar: #efebce;
+    --sidebar-foreground: #4a3728;
+    --sidebar-primary: #a3a380;
+    --sidebar-primary-foreground: #001d00;
+    --sidebar-accent: #d8a48f;
+    --sidebar-accent-foreground: #001d00;
+    --sidebar-border: #a3a380;
+    --sidebar-ring: #bb8588;
+  }
+
+  .dark {
+    /* ── Dark mode — exact hex values ── */
+    --background: #1e140a;
+    --foreground: #d8a48f;
+
+    --card: #2a1e12;
+    --card-foreground: #d8a48f;
+    --popover: #2a1e12;
+    --popover-foreground: #d8a48f;
+
+    /* Primary — sage green (#9CAC74) */
+    --primary: #9cac74;
+    --primary-foreground: #1e140a;
+
+    /* Secondary — warm khaki (#D7CE93) */
+    --secondary: #d7ce93;
+    --secondary-foreground: #1e140a;
+
+    /* Muted — dark warm brown */
+    --muted: #3a2a18;
+    --muted-foreground: #999999;
+
+    /* Accent — mauve (#BB8588) */
+    --accent: #bb8588;
+    --accent-foreground: #1e140a;
+
+    --destructive: #e74c3c;
+    --destructive-foreground: #efebce;
+
+    --border: #9cac74;
+    --input: #3a2a18;
+    --ring: #bb8588;
+
+    /* Charts */
+    --chart-1: #9cac74;
+    --chart-2: #d7ce93;
+    --chart-3: #d8a48f;
+    --chart-4: #bb8588;
+    --chart-5: #efebce;
+
+    /* Sidebar */
+    --sidebar: #2a1e12;
+    --sidebar-foreground: #d8a48f;
+    --sidebar-primary: #9cac74;
+    --sidebar-primary-foreground: #1e140a;
+    --sidebar-accent: #3a2a18;
+    --sidebar-accent-foreground: #999999;
+    --sidebar-border: #9cac74;
+    --sidebar-ring: #bb8588;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    position: relative;
+  }
+
+  /* ── Crumpled paper texture via SVG feTurbulence ── */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23paper)'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
+  }
+
+  /* Ensure stacking context above texture */
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* Fraunces replaced by Bitcount Grid Double (Google Fonts, loaded via index.html)
+@font-face {
+  font-family: "Fraunces";
+  src: url("/assets/fonts/Fraunces.woff2") format("woff2");
+  font-display: swap;
+} */
+
+@font-face {
+  font-family: "Lora";
+  src: url("/assets/fonts/Lora.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrainsMono";
+  src: url("/assets/fonts/JetBrainsMono.woff2") format("woff2");
+  font-display: swap;
+}
+
+@layer utilities {
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Warm shadows — stronger, using palette colors */
+  .shadow-warm {
+    box-shadow: 0 4px 12px rgba(163, 163, 128, 0.45);
+  }
+
+  .shadow-warm-md {
+    box-shadow: 0 8px 24px rgba(163, 163, 128, 0.5);
+  }
+
+  .shadow-warm-sm {
+    box-shadow: 0 2px 6px rgba(163, 163, 128, 0.35);
+  }
+
+  .shadow-candlelit {
+    box-shadow: 0 6px 20px rgba(187, 133, 136, 0.5);
+  }
+}

@@ -1,0 +1,142 @@
+// Version: 1.0.0
+type AvailabilityStatus__846329796 = {#available; #unavailable};
+type BookCondition__753826954 = {#fair; #good; #new_; #poor};
+type BookId__1018210009 = Nat;
+type BookId__220735856 = BookId__1018210009;
+type BookId__787723528 = BookId__1018210009;
+type BookInternal__2372385 =
+  {
+    var author : Text;
+    var availability : AvailabilityStatus__846329796;
+    var condition : BookCondition__753826954;
+    var coverImage : ?ExternalBlob__246066408;
+    createdAt : Timestamp__301639476;
+    var genre : Text;
+    id : BookId__787723528;
+    owner : UserId__910130650;
+    var title : Text
+  };
+type BookRequestInternal__1015012597 =
+  {
+    bookId : BookId__220735856;
+    bookOwnerId : UserId__962399143;
+    createdAt : Timestamp__301639476;
+    id : RequestId__143655780;
+    requesterId : UserId__962399143;
+    var status : RequestStatus__966174077;
+    var updatedAt : Timestamp__301639476
+  };
+type ChatId__898622041 = ChatId__922926295;
+type ChatId__922926295 = Nat;
+type ChatThreadInternal__220092009 =
+  {
+    createdAt : Timestamp__301639476;
+    id : ChatId__898622041;
+    participant1 : UserId__1023572875;
+    participant2 : UserId__1023572875;
+    requestId : RequestId__992769352
+  };
+type Credential__712013070 =
+  {var passwordHash : Text; var salt : Text; userId : UserId__911210446};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ExternalBlob__246066408 = Blob;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type MessageId__291319400 = Nat;
+type MessageId__810287564 = MessageId__291319400;
+type MessageInternal__166801433 =
+  {
+    chatId : ChatId__898622041;
+    id : MessageId__810287564;
+    senderId : UserId__1023572875;
+    sentAt : Timestamp__301639476;
+    var text : Text
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type ProfileInternal__741928561 =
+  {
+    var avatarUrl : ?Text;
+    var bio : Text;
+    id : UserId__914439993;
+    joinedAt : Timestamp__301639476;
+    var name : Text
+  };
+type RequestId__143655780 = RequestId__173743850;
+type RequestId__173743850 = Nat;
+type RequestId__992769352 = RequestId__173743850;
+type RequestStatus__966174077 = {#accepted; #declined; #pending};
+type Session__71599859 =
+  {
+    createdAt : Timestamp__301639476;
+    token : Text;
+    userId : UserId__911210446
+  };
+type Timestamp__301639476 = Int;
+type UserId__1023572875 = UserId__158757552;
+type UserId__158757552 = Text;
+type UserId__910130650 = UserId__158757552;
+type UserId__911210446 = UserId__158757552;
+type UserId__914439993 = UserId__158757552;
+type UserId__962399143 = UserId__158757552;
+type UserRole__1054455867 = {#admin; #guest; #user};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1054455867>
+    };
+  stable authSeedCounter : {var value : Nat};
+  stable books :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?BookInternal__2372385]];
+      var elementIndex : Nat__490723111
+    };
+  stable chatMessages :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MessageInternal__166801433]];
+      var elementIndex : Nat__490723111
+    };
+  stable chatThreads :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ChatThreadInternal__220092009]];
+      var elementIndex : Nat__490723111
+    };
+  stable credentials :
+    {
+      var root : Node__46230540<Text, Credential__712013070>;
+      var size : Nat__490723111
+    };
+  stable nextBookId : {var value : Nat};
+  stable nextChatId : {var value : Nat};
+  stable nextMessageId : {var value : Nat};
+  stable nextRequestId : {var value : Nat};
+  stable profiles :
+    {
+      var root : Node__46230540<UserId__158757552, ProfileInternal__741928561>;
+      var size : Nat__490723111
+    };
+  stable requests :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?BookRequestInternal__1015012597]];
+      var elementIndex : Nat__490723111
+    };
+  stable var sampleDataSeeded : Bool;
+  stable sessions :
+    {
+      var root : Node__46230540<Text, Session__71599859>;
+      var size : Nat__490723111
+    }
+};

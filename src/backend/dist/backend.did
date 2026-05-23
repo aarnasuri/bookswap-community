@@ -1,0 +1,204 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserId = text;
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Timestamp = int;
+type SaveProfileInput = 
+ record {
+   avatarUrl: opt text;
+   bio: text;
+   name: text;
+ };
+type RequestStatus = 
+ variant {
+   accepted;
+   declined;
+   pending;
+ };
+type RequestId = nat;
+type Profile = 
+ record {
+   avatarUrl: opt text;
+   bio: text;
+   id: UserId;
+   joinedAt: Timestamp;
+   name: text;
+ };
+type MessageId = nat;
+type Message = 
+ record {
+   chatId: ChatId;
+   id: MessageId;
+   senderId: UserId;
+   sentAt: Timestamp;
+   "text": text;
+ };
+type GoogleBookResult = 
+ record {
+   authors: vec text;
+   description: text;
+   id: text;
+   isbn: text;
+   printType: text;
+   publishedDate: text;
+   publisher: text;
+   thumbnail: text;
+   title: text;
+ };
+type ExternalBlob = blob;
+type EditBookInput = 
+ record {
+   author: text;
+   condition: BookCondition;
+   coverImage: opt ExternalBlob;
+   genre: text;
+   title: text;
+ };
+type ChatThread = 
+ record {
+   createdAt: Timestamp;
+   id: ChatId;
+   participant1: UserId;
+   participant2: UserId;
+   requestId: RequestId;
+ };
+type ChatId = nat;
+type BookWithOwner = 
+ record {
+   book: Book;
+   ownerName: text;
+ };
+type BookRequest = 
+ record {
+   bookId: BookId;
+   bookOwnerId: UserId;
+   createdAt: Timestamp;
+   id: RequestId;
+   requesterId: UserId;
+   status: RequestStatus;
+   updatedAt: Timestamp;
+ };
+type BookId = nat;
+type BookCondition = 
+ variant {
+   fair;
+   good;
+   new;
+   poor;
+ };
+type Book = 
+ record {
+   author: text;
+   availability: AvailabilityStatus;
+   condition: BookCondition;
+   coverImage: opt ExternalBlob;
+   createdAt: Timestamp;
+   genre: text;
+   id: BookId;
+   owner: UserId;
+   title: text;
+ };
+type AvailabilityStatus = 
+ variant {
+   available;
+   unavailable;
+ };
+type AuthResult = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type AddBookInput = 
+ record {
+   author: text;
+   condition: BookCondition;
+   coverImage: opt ExternalBlob;
+   genre: text;
+   title: text;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  acceptBookRequest: (token: text, requestId: RequestId) -> (opt BookRequest);
+  addBook: (token: text, input: AddBookInput) -> (Book);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  declineBookRequest: (token: text, requestId: RequestId) ->
+   (opt BookRequest);
+  deleteBook: (token: text, bookId: BookId) -> (bool);
+  editBook: (token: text, bookId: BookId, input: EditBookInput) -> (opt Book);
+  getAllAvailableBooks: () -> (vec BookWithOwner) query;
+  getBookDetail: (bookId: BookId) -> (opt BookWithOwner) query;
+  getCallerUserProfile: (token: text) -> (opt Profile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getChatMessages: (token: text, chatId: ChatId) -> (vec Message) query;
+  getMyBooks: (token: text) -> (vec Book) query;
+  getMyChatThreads: (token: text) -> (vec ChatThread) query;
+  getMyRequestInbox: (token: text) -> (vec BookRequest) query;
+  getMyRequests: (token: text) -> (vec BookRequest) query;
+  getOrCreateChatThread: (token: text, requestId: RequestId) -> (ChatThread);
+  getSession: (token: text) -> (opt UserId) query;
+  getUserProfile: (userId: UserId) -> (opt Profile) query;
+  isCallerAdmin: () -> (bool) query;
+  login: (email: text, password: text) -> (AuthResult);
+  register: (email: text, password: text) -> (AuthResult);
+  saveCallerUserProfile: (token: text, input: SaveProfileInput) -> ();
+  searchBooks: (searchTerm: text) -> (vec BookWithOwner) query;
+  searchGoogleBooks: (searchQuery: text) ->
+   (variant {
+      err: text;
+      ok: vec GoogleBookResult;
+    });
+  sendBookRequest: (token: text, bookId: BookId) -> (BookRequest);
+  sendMessage: (token: text, chatId: ChatId, "text": text) -> (Message);
+  setBookAvailability: (token: text, bookId: BookId, status:
+   AvailabilityStatus) -> (opt Book);
+  signOut: (token: text) -> ();
+  transformGoogleBooksResponse: (input: TransformationInput) ->
+   (TransformationOutput) query;
+}
